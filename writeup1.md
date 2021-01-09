@@ -187,3 +187,23 @@ MacBook-Pro-admin:Boot2root avdementev$ scp laurie@192.168.56.101:/home/laurie/b
 laurie@192.168.56.101's password: 
 bomb                                                                                                                                  100%   26KB  18.4MB/s   00:00  
 ```
+
+### Phase1
+
+![phase1](https://github.com/demsasha4yt/Boot2root/blob/master/laurie/phase_1.png)
+
+### Phase2
+![phase2](https://github.com/demsasha4yt/Boot2root/blob/master/laurie/phase_2.png)
+
+### Phase3
+![phase3](https://github.com/demsasha4yt/Boot2root/blob/master/laurie/phase_3.png)
+
+### Phase4
+![phase4](https://github.com/demsasha4yt/Boot2root/blob/master/laurie/phase_4.png)
+
+### Phase5
+![phase5](https://github.com/demsasha4yt/Boot2root/blob/master/laurie/phase_5.png)
+
+### Phase6
+
+## Torture (Thor)
