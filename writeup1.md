@@ -207,4 +207,18 @@ bomb                                                                            
 ![phase6_1](https://github.com/demsasha4yt/Boot2root/blob/master/laurie/phase_6_1.png)
 ![phase5](https://github.com/demsasha4yt/Boot2root/blob/master/laurie/phase_6_2.png)
 
-## Torture (Thor)
+## Turtle (Thor)
+
+The basic list of turtles step
+We'll use turtlejs to draw its way.
+The password is SLASH
+
+```bash
+MBP-admin:Boot2root avdementev$ echo -n SLASH | md5
+646da671ca01bb5d84dbb5fb2238dc8e
+```
+
+The result password is 646da671ca01bb5d84dbb5fb2238dc8e
+
+
+### explot_me (Zaz)
