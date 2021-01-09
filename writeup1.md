@@ -43,7 +43,63 @@ Let's open http://192.168.56.100
 
 We will use penteesting tools like Burp Suite or dirb.
 ```bash
-TODO: burp example
+┌──(dubr㉿kali)-[~]
+└─$ dirb http://192.168.56.106 -r                                                    255 ⨯
+ 
+-----------------
+DIRB v2.22
+By The Dark Raver
+-----------------
+ 
+START_TIME: Sat Jan  9 15:59:16 2021
+URL_BASE: http://192.168.56.106/
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
+OPTION: Not Recursive
+ 
+-----------------
+ 
+GENERATED WORDS: 4612
+ 
+---- Scanning URL: http://192.168.56.106/ ----
++ http://192.168.56.106/cgi-bin/ (CODE:403|SIZE:290)
+==> DIRECTORY: http://192.168.56.106/fonts/
++ http://192.168.56.106/forum (CODE:403|SIZE:287)
++ http://192.168.56.106/index.html (CODE:200|SIZE:1025)
++ http://192.168.56.106/server-status (CODE:403|SIZE:295)
+ 
+-----------------
+END_TIME: Sat Jan  9 15:59:18 2021
+DOWNLOADED: 4612 - FOUND: 4
+ 
+ 
+ 
+┌──(dubr㉿kali)-[~]
+└─$ dirb https://192.168.56.106 -r                                                   130 ⨯
+ 
+-----------------
+DIRB v2.22
+By The Dark Raver
+-----------------
+ 
+START_TIME: Sat Jan  9 16:00:01 2021
+URL_BASE: https://192.168.56.106/
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
+OPTION: Not Recursive
+ 
+-----------------
+ 
+GENERATED WORDS: 4612
+ 
+---- Scanning URL: https://192.168.56.106/ ----
++ https://192.168.56.106/cgi-bin/ (CODE:403|SIZE:291)
+==> DIRECTORY: https://192.168.56.106/forum/
+==> DIRECTORY: https://192.168.56.106/phpmyadmin/
++ https://192.168.56.106/server-status (CODE:403|SIZE:296)
+==> DIRECTORY: https://192.168.56.106/webmail/
+ 
+-----------------
+END_TIME: Sat Jan  9 16:00:03 2021
+DOWNLOADED: 4612 - FOUND: 2
 ```
 
 ## FORUM - Probleme login ?
