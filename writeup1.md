@@ -205,5 +205,7 @@ bomb                                                                            
 ![phase5](https://github.com/demsasha4yt/Boot2root/blob/master/laurie/phase_5.png)
 
 ### Phase6
+![phase6_1](https://github.com/demsasha4yt/Boot2root/blob/master/laurie/phase_6_1.png)
+![phase5](https://github.com/demsasha4yt/Boot2root/blob/master/laurie/phase_6_2.png)
 
 ## Torture (Thor)
