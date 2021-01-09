@@ -1,6 +1,6 @@
 # Method 1
 
-### FIND VMs ID
+## FIND VMs ID
 
 Let's configure 'virtual host adapter (192.168.56.1/24)' network to our VM and find it's IP.
 
@@ -37,7 +37,7 @@ Nmap done: 255 IP addresses (3 hosts up) scanned in 81.90 seconds
 
 The result IP will be like 192.168.56.x (In this case - 192.168.56.100)
 
-### Scan 80 and 443
+## Scan 80 and 443
 Let's open http://192.168.56.100
 (TODO: add 1.png)
 
@@ -46,7 +46,7 @@ We will use penteesting tools like Burp Suite or dirb.
 TODO: burp example
 ```
 
-### FORUM - Probleme login ?
+## FORUM - Probleme login ?
 
 ```
 ....
@@ -82,8 +82,7 @@ Best regards.
 Now we can to access 192.168.56.x/phpmyadmin
 (TODO: add 4.png)
 
-### Reverse Shell
-
+## Reverse Shell
 
 The basic reverse shell injection looks litke this
 
@@ -118,7 +117,7 @@ And now we can to pass this data to ssh or ftp.
 FTP is ok.
 (TODO: add 5.png)
 
-### Sort files (Lmezerd)
+## Sort files (Lmezerd)
 
 There are two files fun and README.md
 ```
@@ -151,7 +150,7 @@ Let's connect to SSH:
 laurie:330b845f32185747e4f8ca15d40ca59796035c89ea809fb5d30f4da83ecf45a4
 ```
 
-### Reverse program (laurie)
+## Reverse program (laurie)
 
 ```
 laurie@192.168.56.101's password:
