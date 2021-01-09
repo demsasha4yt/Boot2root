@@ -1,6 +1,38 @@
 # Method 2
 
-Для началла нам нееобходимо залогиниться под пользоваетелем через ssh.
+To get started, we need to log in as a user via ssh.
+The method is described in writeup1.
+
+We exploit system vulnerabilities.
+The system kernel is 3.2.0-91-generic-pae.
+
+Since we have access to the user laurie, we will work with him.
+We are looking for vulnerabilities on the website www.exploit-db.com
+Finding an exploit https://www.exploit-db.com/exploits/40839
+
+This exploit uses the "pokemon" exploit of the "dirtycow" vulnerability
+as a base and automatically generates a new passwd line.
+This vulnerability allows a local user to elevate their privileges
+due to race error in copy-on-write (COW) implementation
+for pages of memory marked with the Dirty bit flag (changed memory).
+
+This exploit replaces the /etc/passwd file
+and copies it to /tmp/passwd.bak (so as not to lose user data).
+
+Since we need to get root access, we slightly change the file, since there is the user firefart.
+
+Compile the file
+gcc -pthread dirty.c -o dirty -lcrypt
+
+Run ./dirty my-new-password
+
+And log in to root via su with our new password)
+Since we have ISO, it is not necessary to restore the passwd backup.
+
+
+# Метод 2
+
+Для начала нам необходимо залогиниться под пользоваетелем через ssh.
 Метод описан в writeup1.
 
 Используем уязвимости системы.
@@ -28,3 +60,5 @@ gcc -pthread dirty.c -o dirty -lcrypt
 
 И логинимся в root через su с нашим новым паролем)
 Так как у нас ISO, восстанавливать бекап passwd необязательно.
+
+
