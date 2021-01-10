@@ -625,9 +625,8 @@ $6 = 432
 
 The password for thor
  ```
- Publicspeakingisveryeasy.126241207200q7779opukmq426315
-
- ```
+Publicspeakingisveryeasy.126241207201b2149opekmq426135
+```
 
 ## Turtle (Thor)
 
