@@ -39,8 +39,7 @@ The result IP will be like 192.168.56.x (In this case - 192.168.56.100)
 
 ## Scan 80 and 443
 Let's open http://192.168.56.100
-(TODO: add 1.png)
-
+![](https://github.com/demsasha4yt/Boot2root/blob/master/screens/1.png)
 We will use penteesting tools like Burp Suite or dirb.
 ```bash
 ┌──(dubr㉿kali)-[~]
@@ -116,7 +115,7 @@ After some tries we got password for lmezards forum account
 ```
 lmezard:!q\]Ej?*5K5cy*AJ
 ```
-(TODO: add 2.png)
+![](https://github.com/demsasha4yt/Boot2root/blob/master/screens/2.png)
 
 Lmezards mail is laurie@borntosec.net
 Let's try to access to 192.168.56.x/forum with the same password
@@ -124,6 +123,7 @@ Let's try to access to 192.168.56.x/forum with the same password
 ```
 laurie@borntosec.net:!q\]Ej?*5K5cy*AJ
 ```
+
 
 There is the message DB Access:
 
@@ -136,7 +136,7 @@ Best regards.
 ```
 
 Now we can to access 192.168.56.x/phpmyadmin
-(TODO: add 4.png)
+![](https://github.com/demsasha4yt/Boot2root/blob/master/screens/4.png)
 
 ## Reverse Shell
 
@@ -171,7 +171,7 @@ lmezard:G!@M6f4Eatau{sF"
 
 And now we can to pass this data to ssh or ftp.
 FTP is ok.
-(TODO: add 5.png)
+![](https://github.com/demsasha4yt/Boot2root/blob/master/screens/5.png)
 
 ## Sort files (Lmezerd)
 
@@ -243,25 +243,391 @@ laurie@192.168.56.101's password:
 bomb                                                                                                                                  100%   26KB  18.4MB/s   00:00  
 ```
 
+```c
+undefined4 main(char **argv, char **envp)
+{
+    int32_t iVar1;
+    char *s;
+    int32_t var_18h;
+    
+    if (argv == (char **)0x1) {
+        _infile = _reloc.stdin;
+    } else {
+        if (argv != (char **)0x2) {
+            printf("Usage: %s [<input_file>]\n", *envp);
+    // WARNING: Subroutine does not return
+            exit(8);
+        }
+        _infile = fopen(envp[1], 0x8049620);
+        if (_infile == 0) {
+            printf("%s: Error: Couldn\'t open %s\n", *envp, envp[1]);
+    // WARNING: Subroutine does not return
+            exit(8);
+        }
+    }
+    initialize_bomb();
+    printf("Welcome this is my little bomb !!!! You have 6 stages with\n");
+    printf("only one life good luck !! Have a nice day!\n");
+    iVar1 = read_line();
+    gcc2_compiled.(iVar1);
+    phase_defused();
+    printf("Phase 1 defused. How about the next one?\n");
+    iVar1 = read_line();
+    phase_2(iVar1);
+    phase_defused();
+    printf("That\'s number 2.  Keep going!\n");
+    iVar1 = read_line();
+    phase_3(iVar1);
+    phase_defused();
+    printf("Halfway there!\n");
+    s = (char *)read_line();
+    phase_4(s);
+    phase_defused();
+    printf("So you got that one.  Try this one.\n");
+    iVar1 = read_line();
+    phase_5(iVar1);
+    phase_defused();
+    printf("Good work!  On to the next...\n");
+    iVar1 = read_line();
+    phase_6(iVar1);
+    phase_defused();
+    return 0;
+}
+```
+
 ### Phase1
 
-![phase1](https://github.com/demsasha4yt/Boot2root/blob/master/laurie/phase_1.png)
+```c
+void gcc2_compiled.(int32_t arg_8h)
+{
+    int32_t iVar1;
+    
+    iVar1 = strings_not_equal(arg_8h, (int32_t)"Public speaking is very easy.");
+    if (iVar1 != 0) {
+    // WARNING: Subroutine does not return
+        explode_bomb();
+    }
+    return;
+}
+```
+The first arg should be equal string "Public speaking is very easy.". 
 
 ### Phase2
-![phase2](https://github.com/demsasha4yt/Boot2root/blob/master/laurie/phase_2.png)
+```c
+void phase_2(int32_t arg_8h)
+{
+    int32_t iVar1;
+    int32_t var_28h;
+    int32_t iStack32;
+    uint32_t var_18h;
+    int32_t aiStack24 [5];
+    
+    read_six_numbers(arg_8h, (int32_t)&var_18h);
+    if (var_18h != 1) {
+    // WARNING: Subroutine does not return
+        explode_bomb();
+    }
+    iVar1 = 1;
+    do {
+        if (aiStack24[iVar1 + -1] != (iVar1 + 1) * (&iStack32)[iVar1]) {
+    // WARNING: Subroutine does not return
+            explode_bomb();
+        }
+        iVar1 = iVar1 + 1;
+    } while (iVar1 < 6);
+    return;
+}
+```
+
+Function recieves 6 number. The firts number shoulbe 1. And each next should be counted by (now = prev * now_index)
+
+```python
+numbers = []
+numbers.append(1)
+for i in range(1, 6):
+    numbers.append(numbers[i - 1] * (i + 1))
+print(numbers)
+```
+
+The key is [1, 2, 6, 24, 120, 720]
+
 
 ### Phase3
-![phase3](https://github.com/demsasha4yt/Boot2root/blob/master/laurie/phase_3.png)
+```c
+
+// WARNING: Variable defined which should be unmapped: var_18h
+// WARNING: [r2ghidra] Detected overlap for variable var_5h
+
+void phase_3(int32_t arg_8h)
+{
+    int32_t iVar1;
+    char cVar2;
+    int32_t var_18h;
+    uint32_t var_ch;
+    char var_5h;
+    uint32_t var_4h;
+    
+    iVar1 = sscanf(arg_8h, "%d %c %d", &var_ch, &var_5h, &var_4h);
+    if (iVar1 < 3) {
+    // WARNING: Subroutine does not return
+        explode_bomb();
+    }
+    // switch table (8 cases) at 0x80497e8
+    switch(var_ch) {
+    case 0:
+        cVar2 = 'q';
+        if (var_4h != 0x309) {
+    // WARNING: Subroutine does not return
+            explode_bomb();
+        }
+        break;
+    case 1:
+        cVar2 = 'b';
+        if (var_4h != 0xd6) {
+    // WARNING: Subroutine does not return
+            explode_bomb();
+        }
+        break;
+    case 2:
+        cVar2 = 'b';
+        if (var_4h != 0x2f3) {
+    // WARNING: Subroutine does not return
+            explode_bomb();
+        }
+        break;
+    case 3:
+        cVar2 = 'k';
+        if (var_4h != 0xfb) {
+    // WARNING: Subroutine does not return
+            explode_bomb();
+        }
+        break;
+    case 4:
+        cVar2 = 'o';
+        if (var_4h != 0xa0) {
+    // WARNING: Subroutine does not return
+            explode_bomb();
+        }
+        break;
+    case 5:
+        cVar2 = 't';
+        if (var_4h != 0x1ca) {
+    // WARNING: Subroutine does not return
+            explode_bomb();
+        }
+        break;
+    case 6:
+        cVar2 = 'v';
+        if (var_4h != 0x30c) {
+    // WARNING: Subroutine does not return
+            explode_bomb();
+        }
+        break;
+    case 7:
+        cVar2 = 'b';
+        if (var_4h != 0x20c) {
+    // WARNING: Subroutine does not return
+            explode_bomb();
+        }
+        break;
+    default:
+    // WARNING: Subroutine does not return
+        explode_bomb();
+    }
+    if (cVar2 == var_5h) {
+        return;
+    }
+    // WARNING: Subroutine does not return
+    explode_bomb();
+}
+```
+
+There is switch with different cases. The function recieves %d %c %d
+
+Possible results:
+* 0 q 777
+* 1 b 214
+* 2 b 755
+* ...
+* 7 b 514
+
 
 ### Phase4
-![phase4](https://github.com/demsasha4yt/Boot2root/blob/master/laurie/phase_4.png)
+```c
+
+int32_t func4(int32_t arg_8h)
+{
+    int32_t iVar1;
+    int32_t iVar2;
+    int32_t var_18h;
+    
+    if (arg_8h < 2) {
+        iVar2 = 1;
+    } else {
+        iVar1 = func4(arg_8h + -1);
+        iVar2 = func4(arg_8h + -2);
+        iVar2 = iVar2 + iVar1;
+    }
+    return iVar2;
+}
+
+
+void phase_4(char *s)
+{
+    int32_t iVar1;
+    int32_t var_4h;
+    
+    iVar1 = sscanf(s, 0x8049808, &var_4h);
+    if ((iVar1 == 1) && (0 < var_4h)) {
+        iVar1 = func4(var_4h);
+        if (iVar1 != 0x37) {
+    // WARNING: Subroutine does not return
+            explode_bomb();
+        }
+        return;
+    }
+    // WARNING: Subroutine does not return
+    explode_bomb();
+}
+
+```
+
+Simple recursive function.. The solve in phase4_solve.py
 
 ### Phase5
-![phase5](https://github.com/demsasha4yt/Boot2root/blob/master/laurie/phase_5.png)
+
+```c
+void phase_5(int32_t arg_8h)
+{
+    int32_t iVar1;
+    int32_t var_18h;
+    int32_t var_8h;
+    int32_t var_2h;
+    
+    iVar1 = string_length(arg_8h);
+    if (iVar1 != 6) {
+    // WARNING: Subroutine does not return
+        explode_bomb();
+    }
+    iVar1 = 0;
+    do {
+        *(char *)((int32_t)&var_8h + iVar1) = str.isrveawhobpnutfg[(char)(*(uint8_t *)(iVar1 + arg_8h) & 0xf)];
+        iVar1 = iVar1 + 1;
+    } while (iVar1 < 6);
+    var_2h._0_1_ = 0;
+    iVar1 = strings_not_equal((int32_t)&var_8h, (int32_t)"giants");
+    if (iVar1 != 0) {
+    // WARNING: Subroutine does not return
+        explode_bomb();
+    }
+    return;
+}
+```
+
+The function recieves string with length 6 and each its symbol count i & 0xF
+The result shoul be giants
+Script phase5_solve.py solves this
+
+The password is opukmq
 
 ### Phase6
-![phase6_1](https://github.com/demsasha4yt/Boot2root/blob/master/laurie/phase_6_1.png)
-![phase5](https://github.com/demsasha4yt/Boot2root/blob/master/laurie/phase_6_2.png)
+```c
+void phase_6(int32_t arg_8h)
+{
+    code *pcVar1;
+    int32_t iVar2;
+    code *pcVar3;
+    int32_t iVar4;
+    int32_t var_58h;
+    int32_t var_3ch;
+    int32_t var_38h;
+    int32_t var_34h;
+    int32_t var_30h;
+    code *apcStack48 [5];
+    int32_t var_18h;
+    int32_t aiStack24 [5];
+    
+    read_six_numbers(arg_8h, (int32_t)&var_18h);
+    iVar4 = 0;
+    do {
+        if (5 < aiStack24[iVar4 + -1] - 1U) {
+    // WARNING: Subroutine does not return
+            explode_bomb();
+        }
+        iVar2 = iVar4 + 1;
+        if (iVar2 < 6) {
+            do {
+                if ((&var_18h)[iVar4] == (&var_18h)[iVar2]) {
+    // WARNING: Subroutine does not return
+                    explode_bomb();
+                }
+                iVar2 = iVar2 + 1;
+            } while (iVar2 < 6);
+        }
+        iVar4 = iVar4 + 1;
+    } while (iVar4 < 6);
+    iVar4 = 0;
+    do {
+        pcVar3 = node1;
+        iVar2 = 1;
+        if (1 < (&var_18h)[iVar4]) {
+            do {
+                pcVar3 = *(code **)(pcVar3 + 8);
+                iVar2 = iVar2 + 1;
+            } while (iVar2 < (&var_18h)[iVar4]);
+        }
+        apcStack48[iVar4 + -1] = pcVar3;
+        iVar4 = iVar4 + 1;
+    } while (iVar4 < 6);
+    iVar4 = 1;
+    pcVar3 = (code *)var_30h;
+    do {
+        pcVar1 = apcStack48[iVar4 + -1];
+        *(code **)(pcVar3 + 8) = pcVar1;
+        iVar4 = iVar4 + 1;
+        pcVar3 = pcVar1;
+    } while (iVar4 < 6);
+    *(undefined4 *)(pcVar1 + 8) = 0;
+    iVar4 = 0;
+    do {
+        if (*(int32_t *)var_30h < **(int32_t **)(var_30h + 8)) {
+    // WARNING: Subroutine does not return
+            explode_bomb();
+        }
+        var_30h = *(int32_t *)(var_30h + 8);
+        iVar4 = iVar4 + 1;
+    } while (iVar4 < 5);
+    return;
+}
+```
+
+ The function recieves six numbers, sorts it and check that array[0] > array[1] > array[2] > array[3] > array[4] > array[5]
+array[0] = node1
+...
+array[5] = node6
+```bash
+(gdb) p node1
+$1 = 253
+(gdb) p node2
+$2 = 725
+(gdb) p node3
+$3 = 301
+(gdb) p node4
+$4 = 997
+(gdb) p node5
+$5 = 212
+(gdb) p node6
+$6 = 432
+(gdb) p node7
+```
+
+ The resul pass is 4 2 6 3 1 5
+
+The password for thor
+ ```
+ Publicspeakingisveryeasy.126241207200q7779opukmq426315
+
+ ```
 
 ## Turtle (Thor)
 
